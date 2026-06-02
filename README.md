@@ -14,9 +14,9 @@ Cloud-native delivery management platform built with Spring Boot microservices.
 Java 21 · Spring Boot 4.0.6 · PostgreSQL · Redis · Kafka · Docker · Kubernetes · Terraform · AWS
 
 ## Build Stages
-- [x] Etap 1 — Maven multi-module, all 4 services, PostgreSQL
-- [ ] Etap 2 — JWT security, API Gateway, Redis, order lifecycle
-- [ ] Etap 3 — Resilience4j, Kafka, Testcontainers
-- [ ] Etap 4 — Distributed tracing, Prometheus, Grafana
-- [ ] Etap 5 — Kubernetes, Helm, Jenkins, ArgoCD
-- [ ] Etap 6 — Terraform, AWS deployment
+- [x] Phase 1 — Maven multi-module, all 4 services, PostgreSQL
+- [ ] Phase 2 — JWT security, API Gateway, Redis, order lifecycle
+- [ ] Phase 3 — Resilience4j, Kafka, Testcontainers
+- [ ] Phase 4 — Distributed tracing, Prometheus, Grafana
+- [ ] Phase 5 — Kubernetes, Helm, Jenkins, ArgoCD
+- [ ] Phase 6 — Terraform, AWS deployment
