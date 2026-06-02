@@ -1,0 +1,64 @@
+# ── Maven ───────────────────────────────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ── IDE – IntelliJ IDEA ──────────────────────────────────────────────────────
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# ── IDE – VS Code ────────────────────────────────────────────────────────────
+.vscode/
+
+# ── IDE – Eclipse ────────────────────────────────────────────────────────────
+.project
+.classpath
+.settings/
+.factorypath
+
+# ── OS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── Secrets & environment ────────────────────────────────────────────────────
+.env
+.env.*
+*.secret
+application-local.yml
+application-local.properties
+
+# ── Docker volumes (if mounted locally) ─────────────────────────────────────
+docker/volumes/
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Terraform ────────────────────────────────────────────────────────────────
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl
+
+# ── Kubernetes / Helm ────────────────────────────────────────────────────────
+charts/*.tgz
+
+CLAUDE.md
