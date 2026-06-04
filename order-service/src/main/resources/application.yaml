@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create        # Tymczasowo – zastąpione przez 'none' gdy pojawią się migracje Flyway
+      ddl-auto: none
     open-in-view: false
     show-sql: false
     properties:
@@ -19,7 +19,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   flyway:
-    enabled: false            # Włączone gdy pojawią się skrypty w db/migration
+    enabled: true
 
   data:
     redis:
@@ -43,6 +43,10 @@ spring:
 
 server:
   port: 8081
+
+clients:
+  tracking-service:
+    base-url: http://localhost:8082
 
 management:
   endpoints:
