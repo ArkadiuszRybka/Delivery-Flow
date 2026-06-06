@@ -16,4 +16,6 @@ public interface OrderMapper {
     OrderItemResponse toItemResponse(OrderItem item);
 
     DeliveryAddressDto toAddressDto(DeliveryAddress address);
+
+    DeliveryAddress toAddress(DeliveryAddressDto dto);
 }
