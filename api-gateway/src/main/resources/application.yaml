@@ -2,19 +2,9 @@ spring:
   application:
     name: api-gateway
 
-  cloud:
-    gateway:
-      mvc:
-        routes:
-          - id: order-service
-            uri: http://localhost:8081
-            predicates:
-              - Path=/api/v1/orders/**, /api/v1/products/**, /api/v1/admin/**
-
-          - id: tracking-service
-            uri: http://localhost:8082
-            predicates:
-              - Path=/api/v1/tracking/**
+  web:
+    resources:
+      add-mappings: false
 
 server:
   port: 8080
@@ -27,3 +17,6 @@ management:
   endpoint:
     health:
       show-details: always
+  tracing:
+    sampling:
+      probability: 0.0

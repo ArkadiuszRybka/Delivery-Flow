@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record OrderItemRequest(
-        @NotNull UUID productId,
-        @Min(1) int quantity
+        @NotNull(message = "Product ID must not be null") UUID productId,
+        @Min(value = 1, message = "Quantity must be at least 1") int quantity
         ) {
 }

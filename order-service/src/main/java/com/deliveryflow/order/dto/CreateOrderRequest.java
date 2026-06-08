@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record CreateOrderRequest(
-        @NotEmpty @Valid List<OrderItemRequest> items,
-        @NotNull @Valid DeliveryAddressDto deliveryAddress
+        @NotEmpty(message = "Order must contain at least one item") @Valid List<OrderItemRequest> items,
+        @NotNull(message = "Delivery address must not be null") @Valid DeliveryAddressDto deliveryAddress
 ) {
 }
