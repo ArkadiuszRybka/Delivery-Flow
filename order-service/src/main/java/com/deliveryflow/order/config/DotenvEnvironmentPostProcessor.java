@@ -17,9 +17,7 @@ public class DotenvEnvironmentPostProcessor implements EnvironmentPostProcessor 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         Path envFile = Path.of(".env");
-        System.out.println("[DotenvEnvironmentPostProcessor] looking for .env at: " + envFile.toAbsolutePath());
         if (!Files.exists(envFile)) {
-            System.out.println("[DotenvEnvironmentPostProcessor] .env NOT FOUND, skipping");
             return;
         }
 
@@ -42,7 +40,6 @@ public class DotenvEnvironmentPostProcessor implements EnvironmentPostProcessor 
             properties.put(key, value);
         }
 
-        System.out.println("[DotenvEnvironmentPostProcessor] loaded keys: " + properties.keySet());
         environment.getPropertySources().addLast(new MapPropertySource("dotenv", properties));
     }
 }
