@@ -1,0 +1,2 @@
+org.springframework.boot.EnvironmentPostProcessor=\
+com.deliveryflow.order.config.DotenvEnvironmentPostProcessor
