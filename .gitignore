@@ -65,3 +65,7 @@ CLAUDE.md
 
 # ── JWT signing keys (local dev only — never commit real keys) ─────────────
 **/resources/certs/*.pem
+
+# ── Local environment secrets (Stripe keys, etc.) — never commit ───────────
+**/.env
+!**/.env.example

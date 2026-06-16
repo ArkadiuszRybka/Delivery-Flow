@@ -5,11 +5,15 @@ import com.deliveryflow.order.domain.*;
 import com.deliveryflow.order.dto.CreateOrderRequest;
 import com.deliveryflow.order.dto.OrderResponse;
 import com.deliveryflow.order.exception.OrderNotFoundException;
+import com.deliveryflow.order.exception.PaymentIntentCreationException;
 import com.deliveryflow.order.exception.ProductNotFoundException;
 import com.deliveryflow.order.mapper.OrderMapper;
 import com.deliveryflow.order.repository.OrderRepository;
 import com.deliveryflow.order.repository.ProductRepository;
+import com.stripe.exception.StripeException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,15 +32,18 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final OrderMapper orderMapper;
     private final TrackingClient trackingClient;
+    private final PaymentService paymentService;
 
     public OrderService(OrderRepository orderRepository,
                         ProductRepository productRepository,
                         OrderMapper orderMapper,
-                        TrackingClient trackingClient) {
+                        TrackingClient trackingClient,
+                        PaymentService paymentService) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.orderMapper = orderMapper;
         this.trackingClient = trackingClient;
+        this.paymentService = paymentService;
     }
 
     @Transactional
@@ -80,11 +87,20 @@ public class OrderService {
         order.setCurrency(currency);
 
         Order saved = orderRepository.save(order);
+
+        try {
+            var paymentIntent = paymentService.createPaymentIntent(saved.getOrderId(), saved.getTotalAmount(), saved.getCurrency());
+            saved.setPaymentIntentId(paymentIntent.getId());
+        } catch (StripeException e) {
+            throw new PaymentIntentCreationException(saved.getOrderId(), e);
+        }
+
         trackingClient.createTrackingEntry(saved.getOrderId(), "PENDING");
         log.info("Created order orderId={}, customerId={}", saved.getOrderId(), customerId);
         return orderMapper.toResponse(saved);
     }
 
+    @Cacheable(value = "orders", key = "#orderId + '_' + #customerId")
     @Transactional(readOnly = true)
     public OrderResponse getOrder(UUID orderId, UUID customerId) {
         Order order = orderRepository.findByOrderId(orderId)
@@ -101,6 +117,7 @@ public class OrderService {
                 .map(orderMapper::toResponse);
     }
 
+    @CacheEvict(value = "orders", allEntries = true)
     @Transactional
     public OrderResponse cancelOrder(UUID orderId, UUID customerId) {
         Order order = orderRepository.findByOrderId(orderId)
@@ -114,16 +131,37 @@ public class OrderService {
         return orderMapper.toResponse(order);
     }
 
+    @CacheEvict(value = "orders", allEntries = true)
     @Transactional
     public OrderResponse confirmOrder(UUID orderId) {
         Order order = orderRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
+        if (order.getStatus() == OrderStatus.CONFIRMED) {
+            log.info("Order already confirmed, ignoring duplicate confirmation orderId={}", orderId);
+            return orderMapper.toResponse(order);
+        }
         order.confirm();
         trackingClient.createTrackingEntry(orderId, "CONFIRMED");
         log.info("Confirmed order orderId={}", orderId);
         return orderMapper.toResponse(order);
     }
 
+    @CacheEvict(value = "orders", allEntries = true)
+    @Transactional
+    public OrderResponse cancelOrderForPaymentFailure(UUID orderId) {
+        Order order = orderRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            log.info("Order already cancelled, ignoring duplicate payment failure orderId={}", orderId);
+            return orderMapper.toResponse(order);
+        }
+        order.cancel(CancellationReason.PAYMENT_FAILED);
+        trackingClient.createTrackingEntry(orderId, "CANCELLED");
+        log.info("Cancelled order due to payment failure orderId={}", orderId);
+        return orderMapper.toResponse(order);
+    }
+
+    @CacheEvict(value = "orders", allEntries = true)
     @Transactional
     public OrderResponse shipOrder(UUID orderId) {
         Order order = orderRepository.findByOrderId(orderId)
@@ -134,6 +172,7 @@ public class OrderService {
         return orderMapper.toResponse(order);
     }
 
+    @CacheEvict(value = "orders", allEntries = true)
     @Transactional
     public OrderResponse deliverOrder(UUID orderId) {
         Order order = orderRepository.findByOrderId(orderId)

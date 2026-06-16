@@ -7,6 +7,9 @@ import com.deliveryflow.order.exception.ProductNotFoundException;
 import com.deliveryflow.order.mapper.ProductMapper;
 import com.deliveryflow.order.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,7 @@ public class ProductService {
         this.productMapper = productMapper;
     }
 
+    @Cacheable("products")
     @Transactional(readOnly = true)
     public List<ProductResponse> getAvailableProducts() {
         return productRepository.findByAvailableTrue()
@@ -33,6 +37,7 @@ public class ProductService {
                 .toList();
     }
 
+    @Cacheable(value = "product", key = "#productId")
     @Transactional(readOnly = true)
     public ProductResponse getProduct(UUID productId) {
         return productRepository.findByProductId(productId)
@@ -40,6 +45,7 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     @Transactional
     public ProductResponse createProduct(CreateProductRequest request) {
         var product = productMapper.toEntity(request);
@@ -49,6 +55,10 @@ public class ProductService {
         return productMapper.toResponse(saved);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "products", allEntries = true),
+            @CacheEvict(value = "product", key = "#productId")
+    })
     @Transactional
     public ProductResponse updateProduct(UUID productId, CreateProductRequest request) {
         Product product = productRepository.findByProductId(productId)
@@ -63,6 +73,10 @@ public class ProductService {
         return productMapper.toResponse(product);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "products", allEntries = true),
+            @CacheEvict(value = "product", key = "#productId")
+    })
     @Transactional
     public void deleteProduct(UUID productId) {
         Product product = productRepository.findByProductId(productId)
