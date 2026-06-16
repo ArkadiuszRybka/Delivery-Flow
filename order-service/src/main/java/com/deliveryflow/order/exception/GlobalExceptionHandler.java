@@ -38,6 +38,30 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ProblemDetail handleEmailAlreadyExists(EmailAlreadyExistsException ex) {
+        log.warn("Registration failed: {}", ex.getMessage());
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        problem.setTitle("Email Already Registered");
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ProblemDetail handleInvalidCredentials(InvalidCredentialsException ex) {
+        log.warn("Login failed: invalid credentials");
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        problem.setTitle("Invalid Credentials");
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ProblemDetail handleInvalidRefreshToken(InvalidRefreshTokenException ex) {
+        log.warn("Refresh token rejected: {}", ex.getMessage());
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        problem.setTitle("Invalid Refresh Token");
+        return problem;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidation(MethodArgumentNotValidException ex) {
         String details = ex.getBindingResult().getFieldErrors().stream()

@@ -62,3 +62,6 @@ logs/
 charts/*.tgz
 
 CLAUDE.md
+
+# ── JWT signing keys (local dev only — never commit real keys) ─────────────
+**/resources/certs/*.pem

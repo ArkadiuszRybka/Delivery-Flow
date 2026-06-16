@@ -29,6 +29,7 @@
         <spring-cloud.version>2025.1.1</spring-cloud.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <testcontainers.version>1.20.4</testcontainers.version>
+        <jjwt.version>0.12.6</jjwt.version>
     </properties>
 
     <dependencyManagement>
@@ -51,6 +52,21 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
