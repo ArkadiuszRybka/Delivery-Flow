@@ -24,25 +24,25 @@ public class OrderController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse createOrder(@RequestBody @Valid CreateOrderRequest request,
-                                     @RequestHeader("X-Customer-Id") UUID customerId) {
+                                     @RequestHeader("X-User-Id") UUID customerId) {
         return orderService.createOrder(request, customerId);
     }
 
     @GetMapping("/{orderId}")
     public OrderResponse getOrder(@PathVariable UUID orderId,
-                                  @RequestHeader("X-Customer-Id") UUID customerId) {
+                                  @RequestHeader("X-User-Id") UUID customerId) {
         return orderService.getOrder(orderId, customerId);
     }
 
     @GetMapping
-    public Page<OrderResponse> getOrderHistory(@RequestHeader("X-Customer-Id") UUID customerId,
+    public Page<OrderResponse> getOrderHistory(@RequestHeader("X-User-Id") UUID customerId,
                                                Pageable pageable) {
         return orderService.getOrderHistory(customerId, pageable);
     }
 
     @DeleteMapping("/{orderId}")
     public OrderResponse cancelOrder(@PathVariable UUID orderId,
-                                     @RequestHeader("X-Customer-Id") UUID customerId) {
+                                     @RequestHeader("X-User-Id") UUID customerId) {
         return orderService.cancelOrder(orderId, customerId);
     }
 }

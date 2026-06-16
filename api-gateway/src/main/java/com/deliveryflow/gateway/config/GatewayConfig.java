@@ -17,7 +17,9 @@ public class GatewayConfig {
         return GatewayRouterFunctions.route("order-service")
                 .route(RequestPredicates.path("/api/v1/orders/**")
                         .or(RequestPredicates.path("/api/v1/products/**"))
-                        .or(RequestPredicates.path("/api/v1/admin/**")),
+                        .or(RequestPredicates.path("/api/v1/admin/**"))
+                        .or(RequestPredicates.path("/api/v1/auth/**"))
+                        .or(RequestPredicates.path("/api/v1/webhooks/**")),
                         HandlerFunctions.http())
                 .before(BeforeFilterFunctions.uri("http://localhost:8081"))
                 .build();
