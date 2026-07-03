@@ -16,6 +16,7 @@ public record OrderResponse(
         List<OrderItemResponse> items,
         DeliveryAddressDto deliveryAddress,
         Instant createdAt,
-        Instant updatedAt
+        Instant updatedAt,
+        TrackingInfo tracking
 ) {
 }

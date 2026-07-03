@@ -73,6 +73,14 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
+    @ExceptionHandler(PaymentIntentCreationException.class)
+    public ProblemDetail handlePaymentIntentCreation(PaymentIntentCreationException ex) {
+        log.error("Payment intent creation failed: {}", ex.getMessage(), ex);
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_GATEWAY, "Payment provider unavailable");
+        problem.setTitle("Payment Processing Failed");
+        return problem;
+    }
+
     @ExceptionHandler(NoResourceFoundException.class)
     public ProblemDetail handleNoResourceFound(NoResourceFoundException ex) {
         log.warn("No endpoint found: {} {}", ex.getHttpMethod(), ex.getResourcePath());

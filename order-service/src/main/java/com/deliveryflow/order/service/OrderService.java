@@ -4,6 +4,7 @@ import com.deliveryflow.order.client.TrackingClient;
 import com.deliveryflow.order.domain.*;
 import com.deliveryflow.order.dto.CreateOrderRequest;
 import com.deliveryflow.order.dto.OrderResponse;
+import com.deliveryflow.order.dto.TrackingInfo;
 import com.deliveryflow.order.exception.OrderNotFoundException;
 import com.deliveryflow.order.exception.PaymentIntentCreationException;
 import com.deliveryflow.order.exception.ProductNotFoundException;
@@ -108,7 +109,8 @@ public class OrderService {
         if (!order.getCustomerId().equals(customerId)) {
             throw new OrderNotFoundException(orderId);
         }
-        return orderMapper.toResponse(order);
+        TrackingInfo tracking = trackingClient.getLatestTracking(orderId).orElse(null);
+        return orderMapper.toResponse(order, tracking);
     }
 
     @Transactional(readOnly = true)

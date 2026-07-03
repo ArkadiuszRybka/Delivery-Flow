@@ -10,10 +10,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Strips client-supplied X-User-Id / X-User-Role headers and replaces them with
- * values derived from the validated JWT, so downstream services can trust them blindly.
- */
 public class IdentityHeaderRequestWrapper extends HttpServletRequestWrapper {
 
     public static final String USER_ID_HEADER = "X-User-Id";

@@ -47,6 +47,24 @@ server:
 clients:
   tracking-service:
     base-url: http://localhost:8082
+    connect-timeout: 2s
+    read-timeout: 3s
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      trackingService:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 15
+        minimum-number-of-calls: 15
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+  retry:
+    instances:
+      trackingService:
+        max-attempts: 3
+        wait-duration: 500ms
 
 jwt:
   private-key: classpath:certs/private.pem
@@ -66,6 +84,9 @@ management:
   endpoint:
     health:
       show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
   tracing:
     sampling:
       probability: 0.0

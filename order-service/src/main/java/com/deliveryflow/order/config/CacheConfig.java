@@ -2,6 +2,7 @@ package com.deliveryflow.order.config;
 
 import com.deliveryflow.order.dto.OrderResponse;
 import com.deliveryflow.order.dto.ProductResponse;
+import com.deliveryflow.order.dto.TrackingInfo;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +37,10 @@ public class CacheConfig {
                                 new JacksonJsonRedisSerializer<>(ProductResponse.class))),
                 "orders", baseConfig.entryTtl(Duration.ofMinutes(2))
                         .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
-                                new JacksonJsonRedisSerializer<>(OrderResponse.class)))
+                                new JacksonJsonRedisSerializer<>(OrderResponse.class))),
+                "trackingStatus", baseConfig.entryTtl(Duration.ofMinutes(5))
+                        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
+                                new JacksonJsonRedisSerializer<>(TrackingInfo.class)))
         );
 
         return RedisCacheManager.builder(connectionFactory)
