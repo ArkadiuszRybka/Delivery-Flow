@@ -5,6 +5,11 @@ import com.deliveryflow.order.domain.*;
 import com.deliveryflow.order.dto.CreateOrderRequest;
 import com.deliveryflow.order.dto.OrderResponse;
 import com.deliveryflow.order.dto.TrackingInfo;
+import com.deliveryflow.order.event.OrderCancelled;
+import com.deliveryflow.order.event.OrderConfirmed;
+import com.deliveryflow.order.event.OrderDelivered;
+import com.deliveryflow.order.event.OrderEventPublisher;
+import com.deliveryflow.order.event.OrderShipped;
 import com.deliveryflow.order.exception.OrderNotFoundException;
 import com.deliveryflow.order.exception.PaymentIntentCreationException;
 import com.deliveryflow.order.exception.ProductNotFoundException;
@@ -34,17 +39,20 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final TrackingClient trackingClient;
     private final PaymentService paymentService;
+    private final OrderEventPublisher orderEventPublisher;
 
     public OrderService(OrderRepository orderRepository,
                         ProductRepository productRepository,
                         OrderMapper orderMapper,
                         TrackingClient trackingClient,
-                        PaymentService paymentService) {
+                        PaymentService paymentService,
+                        OrderEventPublisher orderEventPublisher) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.orderMapper = orderMapper;
         this.trackingClient = trackingClient;
         this.paymentService = paymentService;
+        this.orderEventPublisher = orderEventPublisher;
     }
 
     @Transactional
@@ -129,6 +137,8 @@ public class OrderService {
         }
         order.cancel(CancellationReason.CUSTOMER_REQUEST);
         trackingClient.createTrackingEntry(orderId, "CANCELLED");
+        orderEventPublisher.publishAfterCommit(
+                OrderCancelled.of(orderId, order.getCustomerId(), CancellationReason.CUSTOMER_REQUEST));
         log.info("Cancelled order orderId={}", orderId);
         return orderMapper.toResponse(order);
     }
@@ -144,6 +154,8 @@ public class OrderService {
         }
         order.confirm();
         trackingClient.createTrackingEntry(orderId, "CONFIRMED");
+        orderEventPublisher.publishAfterCommit(OrderConfirmed.of(orderId, order.getCustomerId(),
+                order.getTotalAmount(), order.getCurrency(), orderMapper.toAddressDto(order.getDeliveryAddress())));
         log.info("Confirmed order orderId={}", orderId);
         return orderMapper.toResponse(order);
     }
@@ -159,6 +171,8 @@ public class OrderService {
         }
         order.cancel(CancellationReason.PAYMENT_FAILED);
         trackingClient.createTrackingEntry(orderId, "CANCELLED");
+        orderEventPublisher.publishAfterCommit(
+                OrderCancelled.of(orderId, order.getCustomerId(), CancellationReason.PAYMENT_FAILED));
         log.info("Cancelled order due to payment failure orderId={}", orderId);
         return orderMapper.toResponse(order);
     }
@@ -170,6 +184,7 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
         order.ship();
         trackingClient.createTrackingEntry(orderId, "SHIPPED");
+        orderEventPublisher.publishAfterCommit(OrderShipped.of(orderId, order.getCustomerId(), null));
         log.info("Shipped order orderId={}", orderId);
         return orderMapper.toResponse(order);
     }
@@ -181,6 +196,7 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
         order.deliver();
         trackingClient.createTrackingEntry(orderId, "DELIVERED");
+        orderEventPublisher.publishAfterCommit(OrderDelivered.of(orderId, order.getCustomerId()));
         log.info("Delivered order orderId={}", orderId);
         return orderMapper.toResponse(order);
     }

@@ -15,8 +15,8 @@ Java 21 · Spring Boot 4.0.6 · PostgreSQL · Redis · Kafka · Docker · Kubern
 
 ## Build Stages
 - [ ] Phase 1 — Maven multi-module, all 4 services, PostgreSQL
-- [x] Phase 2 — JWT security, API Gateway, Redis, order lifecycle
-- [ ] Phase 3 — Resilience4j, Kafka, Testcontainers
+- [ ] Phase 2 — JWT security, API Gateway, Redis, order lifecycle
+- [x] Phase 3 — Resilience4j, Kafka, Testcontainers
 - [ ] Phase 4 — Distributed tracing, Prometheus, Grafana
 - [ ] Phase 5 — Kubernetes, Helm, Jenkins, ArgoCD
 - [ ] Phase 6 — Terraform, AWS deployment
