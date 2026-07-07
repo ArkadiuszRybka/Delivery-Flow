@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -133,7 +133,7 @@ class OrderEventPublisherIT {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
         var consumerFactory = new DefaultKafkaConsumerFactory<String, T>(
-                props, new StringDeserializer(), new JsonDeserializer<>(targetType, false));
+                props, new StringDeserializer(), new JacksonJsonDeserializer<>(targetType, false));
         return consumerFactory.createConsumer();
     }
 }
