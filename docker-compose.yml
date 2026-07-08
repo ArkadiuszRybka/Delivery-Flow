@@ -72,6 +72,12 @@ services:
     ports:
       - "9080:8080"
 
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: deliveryflow-zipkin
+    ports:
+      - "9411:9411"
+
 volumes:
   postgres_data:
   redis_data:

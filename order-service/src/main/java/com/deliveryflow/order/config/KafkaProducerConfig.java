@@ -1,5 +1,6 @@
 package com.deliveryflow.order.config;
 
+import io.micrometer.observation.ObservationRegistry;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
 import org.springframework.context.annotation.Bean;
@@ -15,14 +16,20 @@ public class KafkaProducerConfig {
 
     @Bean
     public ProducerFactory<String, Object> producerFactory(KafkaProperties kafkaProperties) {
+        JacksonJsonSerializer<Object> valueSerializer = new JacksonJsonSerializer<>(JsonMapper.builder().build());
+        valueSerializer.setAddTypeInfo(false);
         return new DefaultKafkaProducerFactory<>(
                 kafkaProperties.buildProducerProperties(),
                 new StringSerializer(),
-                new JacksonJsonSerializer<>(JsonMapper.builder().build()));
+                valueSerializer);
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate(ProducerFactory<String, Object> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
+    public KafkaTemplate<String, Object> kafkaTemplate(ProducerFactory<String, Object> producerFactory,
+                                                         ObservationRegistry observationRegistry) {
+        KafkaTemplate<String, Object> template = new KafkaTemplate<>(producerFactory);
+        template.setObservationEnabled(true);
+        template.setObservationRegistry(observationRegistry);
+        return template;
     }
 }

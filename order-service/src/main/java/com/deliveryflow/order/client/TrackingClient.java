@@ -22,12 +22,12 @@ public class TrackingClient {
     private final RestClient restClient;
     private final CacheManager cacheManager;
 
-    public TrackingClient(TrackingClientProperties properties, CacheManager cacheManager) {
+    public TrackingClient(TrackingClientProperties properties, CacheManager cacheManager, RestClient.Builder restClientBuilder) {
         var requestFactory = ClientHttpRequestFactoryBuilder.detect()
                 .build(HttpClientSettings.defaults()
                         .withConnectTimeout(properties.connectTimeout())
                         .withReadTimeout(properties.readTimeout()));
-        this.restClient = RestClient.builder()
+        this.restClient = restClientBuilder
                 .baseUrl(properties.baseUrl())
                 .requestFactory(requestFactory)
                 .build();

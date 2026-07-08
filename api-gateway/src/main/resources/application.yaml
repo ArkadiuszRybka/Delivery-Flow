@@ -43,4 +43,4 @@ management:
       enabled: true
   tracing:
     sampling:
-      probability: 0.0
+      probability: 1.0

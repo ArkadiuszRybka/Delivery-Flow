@@ -1,6 +1,7 @@
 package com.deliveryflow.notification.config;
 
 import com.deliveryflow.notification.event.OrderEvent;
+import io.micrometer.observation.ObservationRegistry;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
@@ -37,10 +38,13 @@ public class KafkaConsumerConfig {
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, OrderEvent> kafkaListenerContainerFactory(
             ConsumerFactory<String, OrderEvent> consumerFactory,
-            KafkaTemplate<String, Object> dltKafkaTemplate) {
+            KafkaTemplate<String, Object> dltKafkaTemplate,
+            ObservationRegistry observationRegistry) {
         ConcurrentKafkaListenerContainerFactory<String, OrderEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+        factory.getContainerProperties().setObservationEnabled(true);
+        factory.getContainerProperties().setObservationRegistry(observationRegistry);
         factory.setCommonErrorHandler(new DefaultErrorHandler(
                 new DeadLetterPublishingRecoverer(dltKafkaTemplate),
                 new FixedBackOff(1000L, 3)));
@@ -56,7 +60,11 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Object> dltKafkaTemplate(ProducerFactory<String, Object> dltProducerFactory) {
-        return new KafkaTemplate<>(dltProducerFactory);
+    public KafkaTemplate<String, Object> dltKafkaTemplate(ProducerFactory<String, Object> dltProducerFactory,
+                                                            ObservationRegistry observationRegistry) {
+        KafkaTemplate<String, Object> template = new KafkaTemplate<>(dltProducerFactory);
+        template.setObservationEnabled(true);
+        template.setObservationRegistry(observationRegistry);
+        return template;
     }
 }
