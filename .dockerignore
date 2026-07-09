@@ -1,0 +1,10 @@
+**/target/
+**/.idea/
+**/*.iml
+.git/
+.github/
+.idea/
+docs/
+docker/
+*.md
+docker-compose*.yml

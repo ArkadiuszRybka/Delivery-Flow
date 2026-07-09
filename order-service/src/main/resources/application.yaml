@@ -57,8 +57,8 @@ resilience4j:
         wait-duration: 500ms
 
 jwt:
-  private-key: classpath:certs/private.pem
-  public-key: classpath:certs/public.pem
+  private-key: ${JWT_PRIVATE_KEY_PATH:classpath:certs/private.pem}
+  public-key: ${JWT_PUBLIC_KEY_PATH:classpath:certs/public.pem}
   access-expiration: 900
   refresh-expiration: 2592000
 

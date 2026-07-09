@@ -10,7 +10,7 @@ server:
   port: 8080
 
 jwt:
-  public-key: classpath:certs/public.pem
+  public-key: ${JWT_PUBLIC_KEY_PATH:classpath:certs/public.pem}
 
 resilience4j:
   circuitbreaker:
