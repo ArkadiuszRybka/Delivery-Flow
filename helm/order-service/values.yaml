@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/arkadiuszrybka/delivery-flow-order-service
-  tag: "8f2a26cfd36b3d20c8b22723870622bacb489581"
+  tag: "4fa1e9193cf0411843cb176fa2f6f81d1e601aa8"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
