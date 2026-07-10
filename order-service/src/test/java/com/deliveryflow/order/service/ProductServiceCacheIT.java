@@ -59,10 +59,11 @@ class ProductServiceCacheIT {
     }
 
     @Test
-    void getAvailableProducts_secondCallIsServedFromCache() {
+    void getAvailableProducts_secondCallIsServedFromCache() throws InterruptedException {
         when(productRepository.findByAvailableTrue()).thenReturn(List.of(sampleProduct()));
 
         productService.getAvailableProducts();
+        Thread.sleep(50);
         productService.getAvailableProducts();
 
         verify(productRepository, times(1)).findByAvailableTrue();
