@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/arkadiuszrybka/delivery-flow-tracking-service
-  tag: latest
+  tag: "8f2a26cfd36b3d20c8b22723870622bacb489581"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
