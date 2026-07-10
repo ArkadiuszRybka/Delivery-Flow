@@ -1,0 +1,13 @@
+# Internal-only: actuator/prometheus port. ClusterIP so it's unreachable from outside the cluster.
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-metrics
+spec:
+  selector:
+    app: api-gateway
+  ports:
+    - name: management
+      port: {{ .Values.managementPort }}
+      targetPort: management
+  type: ClusterIP

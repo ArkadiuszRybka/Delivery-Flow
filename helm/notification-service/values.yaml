@@ -1,0 +1,26 @@
+image:
+  repository: deliveryflow/notification-service
+  tag: local
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+containerPort: 8083
+
+service:
+  port: 8083
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+dbCredentialsSecret: deliveryflow-db-credentials
+
+infra:
+  postgresHost: ""
+  postgresPort: 5432
+  postgresDb: deliveryflow_notifications
+  kafkaBootstrapServers: ""

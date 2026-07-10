@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-service-config
+data:
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://{{ .Values.infra.postgresHost }}:{{ .Values.infra.postgresPort }}/{{ .Values.infra.postgresDb }}"
+  SPRING_DATA_REDIS_HOST: "{{ .Values.infra.redisHost }}"
+  SPRING_DATA_REDIS_PORT: "{{ .Values.infra.redisPort }}"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "{{ .Values.infra.kafkaBootstrapServers }}"
+  CLIENTS_TRACKING-SERVICE_BASE-URL: "{{ .Values.infra.trackingServiceUri }}"
+  JWT_PRIVATE_KEY_PATH: "file:/etc/secrets/jwt/private.pem"
+  JWT_PUBLIC_KEY_PATH: "file:/etc/secrets/jwt/public.pem"

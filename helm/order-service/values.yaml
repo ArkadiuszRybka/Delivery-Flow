@@ -1,0 +1,30 @@
+image:
+  repository: deliveryflow/order-service
+  tag: local
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+containerPort: 8081
+
+service:
+  port: 8081
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 384Mi
+  limits:
+    memory: 768Mi
+
+dbCredentialsSecret: deliveryflow-db-credentials
+appSecret: order-service-secrets
+
+infra:
+  postgresHost: ""
+  postgresPort: 5432
+  postgresDb: deliveryflow_orders
+  redisHost: ""
+  redisPort: 6379
+  kafkaBootstrapServers: ""
+  trackingServiceUri: http://tracking-service:8082

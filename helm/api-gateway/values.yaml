@@ -1,0 +1,26 @@
+image:
+  repository: deliveryflow/api-gateway
+  tag: local
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+containerPort: 8080
+managementPort: 8090
+
+service:
+  type: NodePort
+  port: 8080
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+appSecret: api-gateway-secrets
+
+routes:
+  orderServiceUri: http://order-service:8081
+  trackingServiceUri: http://tracking-service:8082

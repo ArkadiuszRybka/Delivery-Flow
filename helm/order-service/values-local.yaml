@@ -1,0 +1,6 @@
+infra:
+  postgresHost: host.minikube.internal
+  postgresPort: 5433
+  redisHost: host.minikube.internal
+  redisPort: 6379
+  kafkaBootstrapServers: host.minikube.internal:9095

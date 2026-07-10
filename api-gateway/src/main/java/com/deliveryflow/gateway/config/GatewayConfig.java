@@ -19,6 +19,12 @@ import java.net.URI;
 @Configuration
 public class GatewayConfig {
 
+    private final GatewayRoutesProperties routesProperties;
+
+    public GatewayConfig(GatewayRoutesProperties routesProperties) {
+        this.routesProperties = routesProperties;
+    }
+
     @Bean
     public RouterFunction<ServerResponse> orderServiceRoute() {
         return GatewayRouterFunctions.route("order-service")
@@ -28,7 +34,7 @@ public class GatewayConfig {
                         .or(RequestPredicates.path("/api/v1/auth/**"))
                         .or(RequestPredicates.path("/api/v1/webhooks/**")),
                         HandlerFunctions.http())
-                .before(BeforeFilterFunctions.uri("http://localhost:8081"))
+                .before(BeforeFilterFunctions.uri(routesProperties.orderServiceUri()))
                 .filter(CircuitBreakerFilterFunctions.circuitBreaker("orderService", URI.create("forward:/fallback")))
                 .build();
     }
@@ -38,7 +44,7 @@ public class GatewayConfig {
         return GatewayRouterFunctions.route("tracking-service")
                 .route(RequestPredicates.path("/api/v1/tracking/**"),
                         HandlerFunctions.http())
-                .before(BeforeFilterFunctions.uri("http://localhost:8082"))
+                .before(BeforeFilterFunctions.uri(routesProperties.trackingServiceUri()))
                 .filter(CircuitBreakerFilterFunctions.circuitBreaker("trackingService", URI.create("forward:/fallback")))
                 .build();
     }

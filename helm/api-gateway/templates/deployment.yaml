@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  labels:
+    app: api-gateway
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+            - name: management
+              containerPort: {{ .Values.managementPort }}
+          envFrom:
+            - configMapRef:
+                name: api-gateway-config
+          volumeMounts:
+            - name: jwt-keys
+              mountPath: /etc/secrets/jwt
+              readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: {{ .Values.managementPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: {{ .Values.managementPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 15
+      volumes:
+        - name: jwt-keys
+          secret:
+            secretName: {{ .Values.appSecret }}
+            items:
+              - key: public.pem
+                path: public.pem

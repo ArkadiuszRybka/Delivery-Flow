@@ -12,6 +12,11 @@ server:
 jwt:
   public-key: ${JWT_PUBLIC_KEY_PATH:classpath:certs/public.pem}
 
+gateway:
+  routes:
+    order-service-uri: ${ORDER_SERVICE_URI:http://localhost:8081}
+    tracking-service-uri: ${TRACKING_SERVICE_URI:http://localhost:8082}
+
 resilience4j:
   circuitbreaker:
     instances:

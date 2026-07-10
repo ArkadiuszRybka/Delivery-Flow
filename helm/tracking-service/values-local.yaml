@@ -1,0 +1,3 @@
+infra:
+  postgresHost: host.minikube.internal
+  postgresPort: 5433

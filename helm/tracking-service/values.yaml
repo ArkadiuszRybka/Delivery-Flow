@@ -1,0 +1,25 @@
+image:
+  repository: deliveryflow/tracking-service
+  tag: local
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+containerPort: 8082
+
+service:
+  port: 8082
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+dbCredentialsSecret: deliveryflow-db-credentials
+
+infra:
+  postgresHost: ""
+  postgresPort: 5432
+  postgresDb: deliveryflow_tracking
