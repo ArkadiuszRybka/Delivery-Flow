@@ -1,5 +1,4 @@
 # syntax=docker/dockerfile:1
-# Build context is the repo root (Maven module needs the parent pom.xml).
 
 FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /build

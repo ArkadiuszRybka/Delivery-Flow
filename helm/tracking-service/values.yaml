@@ -1,6 +1,6 @@
 image:
-  repository: deliveryflow/tracking-service
-  tag: local
+  repository: ghcr.io/arkadiuszrybka/delivery-flow-tracking-service
+  tag: latest
   pullPolicy: IfNotPresent
 
 replicaCount: 1

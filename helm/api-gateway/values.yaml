@@ -1,6 +1,6 @@
 image:
-  repository: deliveryflow/api-gateway
-  tag: local
+  repository: ghcr.io/arkadiuszrybka/delivery-flow-api-gateway
+  tag: latest
   pullPolicy: IfNotPresent
 
 replicaCount: 1

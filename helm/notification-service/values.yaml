@@ -1,6 +1,6 @@
 image:
-  repository: deliveryflow/notification-service
-  tag: local
+  repository: ghcr.io/arkadiuszrybka/delivery-flow-notification-service
+  tag: latest
   pullPolicy: IfNotPresent
 
 replicaCount: 1

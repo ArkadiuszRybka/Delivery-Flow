@@ -1,5 +1,4 @@
 # syntax=docker/dockerfile:1
-# Build context is the repo root (Maven module needs the parent pom.xml).
 
 FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /build
@@ -17,6 +16,5 @@ WORKDIR /app
 COPY --from=build /build/api-gateway/target/*.jar app.jar
 USER spring
 
-# 8080: public API. 8090: actuator/metrics only, keep ClusterIP-internal in K8s (see Helm Service in Sekcja B).
 EXPOSE 8080 8090
 ENTRYPOINT ["java", "-jar", "app.jar"]

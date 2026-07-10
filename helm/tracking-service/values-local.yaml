@@ -1,3 +1,7 @@
+image:
+  repository: deliveryflow/tracking-service
+  tag: local
+
 infra:
   postgresHost: host.minikube.internal
   postgresPort: 5433

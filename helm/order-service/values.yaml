@@ -1,6 +1,6 @@
 image:
-  repository: deliveryflow/order-service
-  tag: local
+  repository: ghcr.io/arkadiuszrybka/delivery-flow-order-service
+  tag: latest
   pullPolicy: IfNotPresent
 
 replicaCount: 1
