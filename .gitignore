@@ -56,7 +56,6 @@ logs/
 *.tfstate.backup
 *.tfvars
 !*.tfvars.example
-.terraform.lock.hcl
 
 # ── Kubernetes / Helm ────────────────────────────────────────────────────────
 charts/*.tgz
