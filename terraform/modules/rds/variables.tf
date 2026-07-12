@@ -26,7 +26,7 @@ variable "allocated_storage" {
 
 variable "engine_version" {
   type    = string
-  default = "17.4"
+  default = "17.10"
 }
 
 variable "db_name" {
