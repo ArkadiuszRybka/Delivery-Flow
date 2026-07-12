@@ -1,0 +1,10 @@
+externalSecrets:
+  enabled: true
+
+infra:
+  postgresHost: deliveryflow-postgres.cp2ic6mamlkn.eu-central-1.rds.amazonaws.com
+  postgresPort: 5432
+  redisHost: deliveryflow-redis.07iqm5.0001.euc1.cache.amazonaws.com
+  redisPort: 6379
+  kafkaBootstrapServers: boot-0qoivot9.c1.kafka-serverless.eu-central-1.amazonaws.com:9098
+  kafkaSaslIam: true

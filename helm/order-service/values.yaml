@@ -20,6 +20,9 @@ resources:
 dbCredentialsSecret: deliveryflow-db-credentials
 appSecret: order-service-secrets
 
+externalSecrets:
+  enabled: false
+
 infra:
   postgresHost: ""
   postgresPort: 5432
@@ -27,4 +30,5 @@ infra:
   redisHost: ""
   redisPort: 6379
   kafkaBootstrapServers: ""
+  kafkaSaslIam: false
   trackingServiceUri: http://tracking-service:8082

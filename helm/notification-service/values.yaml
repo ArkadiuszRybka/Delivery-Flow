@@ -24,3 +24,4 @@ infra:
   postgresPort: 5432
   postgresDb: deliveryflow_notifications
   kafkaBootstrapServers: ""
+  kafkaSaslIam: false

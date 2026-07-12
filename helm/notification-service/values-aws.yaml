@@ -1,0 +1,5 @@
+infra:
+  postgresHost: deliveryflow-postgres.cp2ic6mamlkn.eu-central-1.rds.amazonaws.com
+  postgresPort: 5432
+  kafkaBootstrapServers: boot-0qoivot9.c1.kafka-serverless.eu-central-1.amazonaws.com:9098
+  kafkaSaslIam: true

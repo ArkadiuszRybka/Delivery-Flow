@@ -21,6 +21,9 @@ resources:
 
 appSecret: api-gateway-secrets
 
+externalSecrets:
+  enabled: false
+
 routes:
   orderServiceUri: http://order-service:8081
   trackingServiceUri: http://tracking-service:8082

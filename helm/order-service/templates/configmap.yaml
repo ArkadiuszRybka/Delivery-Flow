@@ -10,3 +10,9 @@ data:
   CLIENTS_TRACKING-SERVICE_BASE-URL: "{{ .Values.infra.trackingServiceUri }}"
   JWT_PRIVATE_KEY_PATH: "file:/etc/secrets/jwt/private.pem"
   JWT_PUBLIC_KEY_PATH: "file:/etc/secrets/jwt/public.pem"
+{{- if .Values.infra.kafkaSaslIam }}
+  SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL: "SASL_SSL"
+  SPRING_KAFKA_PROPERTIES_SASL_MECHANISM: "AWS_MSK_IAM"
+  SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG: "software.amazon.msk.auth.iam.IAMLoginModule required;"
+  SPRING_KAFKA_PROPERTIES_SASL_CLIENT_CALLBACK_HANDLER_CLASS: "software.amazon.msk.auth.iam.IAMClientCallbackHandler"
+{{- end }}
