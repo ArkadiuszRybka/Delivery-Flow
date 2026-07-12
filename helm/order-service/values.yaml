@@ -1,6 +1,6 @@
 image:
   repository: 404842057803.dkr.ecr.eu-central-1.amazonaws.com/deliveryflow-order-service
-  tag: "78ecafdba7607826725cbdf996946a695ee0c0fd"
+  tag: "695ce0aa31c5460d749f065810a9308ead7e6c2e"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
