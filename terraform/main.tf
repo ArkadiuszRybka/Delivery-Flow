@@ -45,3 +45,15 @@ module "ecr" {
 
   project_name = var.project_name
 }
+
+module "secrets" {
+  source = "./modules/secrets"
+
+  project_name      = var.project_name
+  oidc_provider_arn = module.eks.oidc_provider_arn
+  oidc_provider_url = module.eks.oidc_provider_url
+  rds_secret_arn    = module.rds.secret_arn
+
+  stripe_secret_key     = var.stripe_secret_key
+  stripe_webhook_secret = var.stripe_webhook_secret
+}
