@@ -1,5 +1,5 @@
 image:
-  repository: ghcr.io/arkadiuszrybka/delivery-flow-api-gateway
+  repository: 404842057803.dkr.ecr.eu-central-1.amazonaws.com/deliveryflow-api-gateway
   tag: "b565d7a3d0e80e8565d227124bed17c2ab1f630e"
   pullPolicy: IfNotPresent
 
