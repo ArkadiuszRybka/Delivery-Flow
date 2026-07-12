@@ -1,6 +1,6 @@
 image:
   repository: 404842057803.dkr.ecr.eu-central-1.amazonaws.com/deliveryflow-notification-service
-  tag: "b565d7a3d0e80e8565d227124bed17c2ab1f630e"
+  tag: "623438bd30bbeffcd68de428dcd123dd614f3718"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
