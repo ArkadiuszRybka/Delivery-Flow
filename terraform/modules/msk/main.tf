@@ -43,3 +43,72 @@ resource "aws_msk_serverless_cluster" "main" {
     Name = "${var.project_name}-msk"
   }
 }
+
+data "aws_iam_policy_document" "kafka_client_assume_role" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = [var.oidc_provider_arn]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(var.oidc_provider_url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:${var.kafka_client_namespace}:${var.kafka_client_service_account}"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(var.oidc_provider_url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "kafka_client" {
+  name               = "${var.project_name}-kafka-client"
+  assume_role_policy = data.aws_iam_policy_document.kafka_client_assume_role.json
+}
+
+data "aws_iam_policy_document" "kafka_client_permissions" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "kafka-cluster:Connect",
+      "kafka-cluster:DescribeCluster",
+    ]
+    resources = [aws_msk_serverless_cluster.main.arn]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "kafka-cluster:*Topic*",
+      "kafka-cluster:ReadData",
+      "kafka-cluster:WriteData",
+    ]
+    resources = ["${replace(aws_msk_serverless_cluster.main.arn, ":cluster/", ":topic/")}/order.events"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "kafka-cluster:AlterGroup",
+      "kafka-cluster:DescribeGroup",
+    ]
+    resources = ["${replace(aws_msk_serverless_cluster.main.arn, ":cluster/", ":group/")}/notification-service-group"]
+  }
+}
+
+resource "aws_iam_policy" "kafka_client" {
+  name   = "${var.project_name}-kafka-client"
+  policy = data.aws_iam_policy_document.kafka_client_permissions.json
+}
+
+resource "aws_iam_role_policy_attachment" "kafka_client" {
+  role       = aws_iam_role.kafka_client.name
+  policy_arn = aws_iam_policy.kafka_client.arn
+}

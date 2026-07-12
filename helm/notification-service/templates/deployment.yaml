@@ -14,6 +14,7 @@ spec:
       labels:
         app: notification-service
     spec:
+      serviceAccountName: {{ .Values.serviceAccountName | default "default" }}
       containers:
         - name: notification-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

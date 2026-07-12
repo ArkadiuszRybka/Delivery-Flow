@@ -1,6 +1,8 @@
 externalSecrets:
   enabled: true
 
+serviceAccountName: kafka-client
+
 infra:
   postgresHost: deliveryflow-postgres.cp2ic6mamlkn.eu-central-1.rds.amazonaws.com
   postgresPort: 5432
