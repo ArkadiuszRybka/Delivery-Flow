@@ -79,6 +79,7 @@ data "aws_iam_policy_document" "kafka_client_permissions" {
     actions = [
       "kafka-cluster:Connect",
       "kafka-cluster:DescribeCluster",
+      "kafka-cluster:WriteDataIdempotently",
     ]
     resources = [aws_msk_serverless_cluster.main.arn]
   }
