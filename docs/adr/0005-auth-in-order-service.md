@@ -1,4 +1,4 @@
-# ADR 0006 — Authentication in order-service, not a separate auth-service
+# ADR 0005 — Authentication in order-service, not a separate auth-service
 
 Date: 2025-06
 Status: Accepted

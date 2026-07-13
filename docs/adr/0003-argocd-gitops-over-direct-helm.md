@@ -1,7 +1,7 @@
 # ADR 0003 — Use ArgoCD for Kubernetes deployments (GitOps)
 
 Date: 2025-06
-Status: Accepted
+Status: Accepted (CI tool superseded by ADR 0006 — see below; ArgoCD/GitOps decision itself still stands)
 
 ## Context
 
